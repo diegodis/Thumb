@@ -1,0 +1,57 @@
+<h2>Votes</h2>
+
+<div>
+  <div *ngFor="let candidate of candidates" class="candidateSection"
+    [ngStyle]="{'background-image':'url('+pathImages+candidate.image+')'}">
+    
+    <div class="resume-vote">
+    
+    <div class="hand-selection">
+      <div class="inner-hand" *ngIf="candidate.selectionVote==selectionVoteOk" class="background-opacity-blue">
+        <img class="img-check" src="/assets/img/handUp.png" />
+      </div>
+      <div class="inner-hand" *ngIf="candidate.selectionVote==selectionVoteFail" class="background-opacity-orange">
+        <img class="img-check" src="/assets/img/handDown.png" />
+      </div>
+    </div>
+    
+    <div class="name-candidate">{{candidate.fullname}}</div>
+    <div class="time-candidate">{{candidate.time}} in <b>{{candidate.activity}}</b></div>
+    
+    <div class="resume-candidate">
+      {{candidate.resume}}
+    </div>
+
+    <div class="candidate-buttons">
+      <button *ngIf="!candidate.stateVote" (click)="candidate.selectionVote=selectionVoteOk" class="buttonHand button-hand background-opacity-blue background-hand-up background-position-center"
+        [ngClass]="{buttonActive:(candidate.selectionVote==selectionVoteOk)}"></button>
+      <button *ngIf="!candidate.stateVote" (click)="candidate.selectionVote=selectionVoteFail" class="buttonHand button-hand background-opacity-orange background-hand-down background-position-center"
+        [ngClass]="{buttonActive:(candidate.selectionVote==selectionVoteFail)}"></button>
+      <button *ngIf="!candidate.stateVote" (click)="calculateVote(candidate)" class="buttonVote">Vote now</button>
+      <button *ngIf="candidate.stateVote" (click)="voteAgain(candidate)" class="buttonVote">Vote Again</button>
+    </div>
+
+    </div>
+    <div class="percentContainer">
+      <div class="percentVotes background-opacity-blue"
+        [style.width.%]=" calculatePercent(candidate.votesOk, candidate.votesOk, candidate.votesFail)">
+        <div class="inner-hand">
+          <img src="/assets/img/handUp.png" />
+        </div>
+        <div class="inner-hand width-percent">
+          {{  calculatePercent(candidate.votesOk, candidate.votesOk, candidate.votesFail) | number : '1.0-0'  }}%
+        </div>
+      </div>
+      <div class="percentVotes background-opacity-orange"
+        [style.width.%]="calculatePercent(candidate.votesFail, candidate.votesOk, candidate.votesFail)">
+        <div class="inner-hand">
+          <img src="/assets/img/handDown.png" />
+        </div>
+        <div class="inner-hand width-percent">
+          {{ calculatePercent(candidate.votesFail, candidate.votesOk, candidate.votesFail) | number :  '1.0-0' }}%
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
